@@ -1,47 +1,55 @@
-export default function Page() {
-  return (
-    <main
-      style={{
-        colorScheme: 'light dark',
-        position: 'relative',
-        display: 'flex',
-        minHeight: '100vh',
-        alignItems: 'center',
-        justifyContent: 'center',
-        backgroundColor: 'light-dark(#fff, #000)',
-        color: 'light-dark(#000, #fff)',
-      }}
-    >
-      <svg
-        aria-hidden="true"
-        style={{ width: 80, height: 80 }}
-        width={80}
-        height={80}
-        fill="none"
-        viewBox="0 0 20 20"
-        xmlns="http://www.w3.org/2000/svg"
-        stroke="currentColor"
-        strokeWidth="0.5"
-      >
-        <path
-          d="M14.2 14.2H17V6.9375C17 4.76288 15.2371 3 13.0625 3H5.8V5.8M14.2 14.2V7.79063L7.79062 14.2H14.2ZM14.2 14.2V17H6.9375C4.76288 17 3 15.2371 3 13.0625V5.8H5.8M5.8 5.8V12.2313L12.2313 5.8H5.8Z"
-          strokeLinejoin="round"
-        />
-      </svg>
-      <p
-        style={{
-          position: 'absolute',
-          left: '50%',
-          top: 'calc(50% + 56px)',
-          transform: 'translateX(-50%)',
-          whiteSpace: 'nowrap',
-          fontSize: '14px',
-          fontWeight: 500,
-          color: 'light-dark(#71717a, #a1a1aa)',
-        }}
-      >
-        Your v0 generation will show here.
-      </p>
-    </main>
-  )
+'use client'
+
+import { useState } from 'react'
+import {
+  Activity, AlertTriangle, ArrowRight, Bell, Building2, CheckCircle2, ChevronDown,
+  Clock3, FileText, HeartPulse, Home, Hospital, LayoutDashboard, LifeBuoy, MapPin,
+  Menu, MessageSquare, MoreHorizontal, Network, Search, Settings, ShieldCheck,
+  Stethoscope, UserRound, Users, X, Zap,
+} from 'lucide-react'
+
+const heroImage = 'https://hebbkx1anhila5yf.public.blob.vercel-storage.com/ChatGPT%20Image%20Sep%2012%2C%202026%2C%2002_54_16%20PM-TlUjqN98KFtCZMh0r6gbmirdru8eaA.png'
+
+type View = 'dashboard' | 'referrals' | 'facilities' | 'network' | 'analytics' | 'settings'
+
+const navItems: { label: string; view: View; icon: typeof Home }[] = [
+  { label: 'Overview', view: 'dashboard', icon: LayoutDashboard },
+  { label: 'Referrals', view: 'referrals', icon: FileText },
+  { label: 'Facilities', view: 'facilities', icon: Hospital },
+  { label: 'Network map', view: 'network', icon: Network },
+  { label: 'Analytics', view: 'analytics', icon: Activity },
+]
+
+function Logo({ compact = false }: { compact?: boolean }) {
+  return <div className="logo"><div className="logo-mark"><HeartPulse size={22} strokeWidth={2.5} /></div>{!compact && <div><strong>CAREPATH <span>AI</span></strong><small>Right care. Right place.</small></div>}</div>
 }
+
+function Login({ onEnter }: { onEnter: () => void }) {
+  return <main className="login-page">
+    <div className="login-photo" style={{ backgroundImage: `linear-gradient(90deg, rgba(250,246,237,.1), rgba(250,246,237,.78)), url("${heroImage}")` }} />
+    <div className="login-overlay" />
+    <header className="login-brand"><Logo /><div className="prototype"><span className="status-dot" /> Student Hackathon Prototype <small>Synthetic/Demo Data Only</small></div></header>
+    <div className="login-copy"><p className="eyebrow">CONNECTED CARE NETWORK</p><h1>AI-powered healthcare<br />referral and facility<br />matching network.</h1><div className="teal-line" /><p>Smarter referrals. Stronger networks.<br />Better outcomes.</p><div className="login-stats"><div><Building2 /><b>24+</b><span>Connected facilities</span></div><div><Users /><b>1,200+</b><span>Lives supported</span></div><div><Clock3 /><b>31 min</b><span>Avg. referral time</span></div></div></div>
+    <section className="login-card"><p className="eyebrow">WELCOME TO</p><h2>CAREPATH <span>AI</span></h2><p className="tagline">Right Patient. Right Facility. Right Time.</p><div className="teal-line" /><p className="card-description">AI-powered healthcare referral and facility matching network.</p><label>Email Address</label><div className="input-like"><MessageSquare size={18} /> <span>Enter your email</span></div><label>Password</label><div className="input-like"><ShieldCheck size={18} /> <span>Enter your password</span><MoreHorizontal size={18} /></div><label>Select Role</label><div className="input-like"><UserRound size={18} /> <span>Healthcare Worker / PHC</span><ChevronDown size={18} /></div><button className="primary-button" onClick={onEnter}>Login <ArrowRight size={18} /></button><button className="outline-button" onClick={onEnter}><Zap size={18} /> Demo Mode</button><p className="demo-label">Demo Accounts</p><div className="demo-accounts"><button onClick={onEnter}><Stethoscope /><span>Healthcare<br />Worker</span></button><button onClick={onEnter}><Hospital /><span>Hospital</span></button><button onClick={onEnter}><Settings /><span>Administrator</span></button><button onClick={onEnter}><UserRound /><span>Patient</span></button></div><p className="disclaimer"><ShieldCheck size={18} /> This is a STUDENT HACKATHON PROTOTYPE. Use synthetic/demo data only.<br /> AI assistance is advisory and requires healthcare professional confirmation.</p></section>
+  </main>
+}
+
+function StatCard({ icon: Icon, value, label, tone = 'teal', detail }: { icon: typeof Activity; value: string; label: string; tone?: string; detail?: string }) {
+  return <div className="stat-card"><div className={`stat-icon ${tone}`}><Icon size={19} /></div><div><b>{value}</b><p>{label}</p>{detail && <small>{detail}</small>}</div></div>
+}
+
+function Overview({ setView }: { setView: (v: View) => void }) {
+  return <><div className="page-heading"><div><p className="eyebrow">MONDAY, SEPTEMBER 12, 2026</p><h1>Good morning, Amina</h1><p className="muted">Here&apos;s what&apos;s happening across your care network today.</p></div><button className="primary-button small" onClick={() => setView('referrals')}><FileText size={16} /> New referral</button></div><div className="stat-grid"><StatCard icon={FileText} value="18" label="Active referrals" detail="↑ 12% this week" /><StatCard icon={Clock3} value="31 min" label="Avg. referral time" detail="↓ 8 min vs. last month" tone="blue" /><StatCard icon={Building2} value="24" label="Connected facilities" detail="3 pending review" tone="purple" /><StatCard icon={CheckCircle2} value="94%" label="Match success rate" detail="↑ 4.2% this month" tone="orange" /></div><div className="content-grid"><section className="panel"><div className="panel-heading"><div><h2>Referral activity</h2><p className="muted">Referrals across your network</p></div><button className="ghost-button">Last 7 days <ChevronDown size={14} /></button></div><div className="chart"><div className="chart-grid" /> <div className="bars">{[42, 62, 54, 78, 64, 91, 73].map((h, i) => <div className="bar-wrap" key={i}><div className="bar" style={{ height: `${h}%` }} /><span>{['Mon','Tue','Wed','Thu','Fri','Sat','Sun'][i]}</span></div>)}</div><div className="chart-note"><span className="legend teal-bg" /> New referrals <span className="legend blue-bg" /> Completed</div></div></section><section className="panel alert-panel"><div className="panel-heading"><div><h2>Needs attention</h2><p className="muted">Items requiring your review</p></div><span className="count-badge">4</span></div>{[['High priority referral','REF-2026-0842','12 min ago', 'red'],['Facility capacity alert','Kenyatta National Hospital','1 hr ago', 'amber'],['AI suggestion ready','REF-2026-0838','2 hrs ago', 'teal']].map(([title, id, time, color]) => <button className="alert-row" key={id}><span className={`alert-dot ${color}`} /><span><b>{title}</b><small>{id} · {time}</small></span><ArrowRight size={16} /></button>)}<button className="view-all" onClick={() => setView('referrals')}>View all attention items <ArrowRight size={15} /></button></section></div><div className="content-grid lower"><section className="panel"><div className="panel-heading"><div><h2>Recent referrals</h2><p className="muted">Latest activity from your team</p></div><button className="ghost-button" onClick={() => setView('referrals')}>View all <ArrowRight size={14} /></button></div><ReferralTable compact /></section><section className="panel network-card"><div className="panel-heading"><div><h2>Network pulse</h2><p className="muted">Live facility capacity</p></div><Network size={20} className="teal" /></div><div className="pulse-map"><div className="map-rings" /><MapPin className="pin p1" /><MapPin className="pin p2" /><MapPin className="pin p3" /><MapPin className="pin p4" /><div className="map-label"><span className="live-dot" /> 24 facilities live</div></div><div className="capacity-row"><span>Overall capacity</span><b>72%</b><div className="progress"><i style={{ width: '72%' }} /></div></div></section></div></>
+}
+
+function ReferralTable({ compact = false }: { compact?: boolean }) { const rows = [['REF-2026-0842','Miriam Wanjiku','Trauma / Orthopedics','Kenyatta National','Urgent','12 min ago'],['REF-2026-0841','David Ochieng','Cardiology','Aga Khan Hospital','Matching','34 min ago'],['REF-2026-0839','Grace Njeri','Maternity','MP Shah Hospital','Accepted','1 hr ago'],['REF-2026-0838','John Kamau','Neurology','Awaiting match','Review','2 hrs ago']]; return <div className="table-wrap"><table><thead><tr><th>Referral ID</th><th>Patient</th><th>Specialty</th><th>Destination</th><th>Status</th><th>Updated</th></tr></thead><tbody>{rows.slice(0, compact ? 3 : 4).map(r => <tr key={r[0]}><td className="mono">{r[0]}</td><td><b>{r[1]}</b></td><td>{r[2]}</td><td>{r[3]}</td><td><span className={`pill ${r[4].toLowerCase()}`}>{r[4]}</span></td><td className="muted">{r[5]}</td></tr>)}</tbody></table></div> }
+
+function Referrals() { return <><div className="page-heading"><div><p className="eyebrow">CARE COORDINATION</p><h1>Referral workspace</h1><p className="muted">Create, review, and track patient referrals.</p></div><button className="primary-button small"><FileText size={16} /> New referral</button></div><div className="filter-bar"><div className="search-box"><Search size={16} /><input placeholder="Search referrals, patients, or facilities" /></div><button className="ghost-button">All statuses <ChevronDown size={14} /></button><button className="ghost-button">All specialties <ChevronDown size={14} /></button></div><section className="panel"><div className="panel-heading"><div><h2>All referrals <span className="sub-count">18 total</span></h2><p className="muted">Synthetic records for demonstration</p></div><button className="ghost-button"><MoreHorizontal size={16} /></button></div><ReferralTable /></section></> }
+
+function Facilities() { return <><div className="page-heading"><div><p className="eyebrow">CARE NETWORK</p><h1>Facility directory</h1><p className="muted">Monitor capacity, specialties, and referral performance.</p></div><button className="outline-button small"><Building2 size={16} /> Add facility</button></div><div className="stat-grid"><StatCard icon={Building2} value="24" label="Total facilities" /><StatCard icon={Activity} value="18" label="Online now" tone="blue" /><StatCard icon={Users} value="72%" label="Network capacity" tone="purple" /><StatCard icon={Clock3} value="4.8/5" label="Partner rating" tone="orange" /></div><section className="panel"><div className="panel-heading"><div><h2>Connected facilities</h2><p className="muted">Last synced moments ago</p></div><div className="search-box compact-search"><Search size={15} /><input placeholder="Search facilities" /></div></div><div className="facility-list">{[['Kenyatta National Hospital','Nairobi · Public referral center','Tertiary care · Trauma','78%','Open'],['Aga Khan University Hospital','Nairobi · Private','Cardiology · Oncology','64%','Open'],['MP Shah Hospital','Nairobi · Private','Maternity · Pediatrics','82%','Limited'],['Mbagathi County Hospital','Nairobi · Public','Emergency · General','48%','Open']].map(([name, meta, tags, capacity, status]) => <div className="facility-row" key={name}><div className="facility-avatar"><Hospital size={20} /></div><div className="facility-main"><b>{name}</b><span>{meta}</span><small>{tags}</small></div><div className="facility-cap"><span>Capacity</span><b>{capacity}</b><div className="progress"><i style={{ width: capacity }} /></div></div><span className={`pill ${status === 'Open' ? 'accepted' : 'review'}`}>{status}</span><button className="icon-button"><MoreHorizontal size={17} /></button></div>)}</div></section></> }
+
+function NetworkView() { return <><div className="page-heading"><div><p className="eyebrow">REAL-TIME NETWORK VIEW</p><h1>Network command center</h1><p className="muted">See facility capacity and active care movement at a glance.</p></div><div className="live-status"><span className="live-dot" /> Live updates</div></div><div className="network-layout"><section className="panel big-map"><div className="map-toolbar"><button className="ghost-button">Nairobi metro <ChevronDown size={14} /></button><span className="muted">Updated 30 seconds ago</span></div><div className="network-map"><div className="map-grid-lines" /><div className="road r1" /><div className="road r2" /><div className="road r3" />{[['Kenyatta', '34%', '29%'],['Aga Khan', '65%', '47%'],['MP Shah', '52%', '63%'],['Mbagathi', '24%', '71%'],['Mama Lucy', '77%', '76%']].map(([name, x, y]) => <div className="facility-pin" style={{ left: x, top: y }} key={name}><span /><label>{name}</label></div>)}<div className="route-line" /><div className="map-legend"><span><i className="pin-key teal-key" /> Open capacity</span><span><i className="pin-key amber-key" /> Limited</span><span><i className="pin-key red-key" /> At capacity</span></div></div></section><section className="panel"><div className="panel-heading"><div><h2>Facility status</h2><p className="muted">5 locations in view</p></div></div>{[['Kenyatta National','78%','teal'],['Aga Khan University','64%','teal'],['MP Shah Hospital','82%','amber'],['Mbagathi County','48%','teal'],['Mama Lucy Kibaki','91%','red']].map(([n, c, t]) => <div className="status-row" key={n}><span className={`status-indicator ${t}`} /><span>{n}</span><b>{c}</b><ChevronDown size={14} className="muted" /></div>)}<button className="view-all">Open facility directory <ArrowRight size={15} /></button></section></div></> }
+
+function Analytics() { return <><div className="page-heading"><div><p className="eyebrow">NETWORK INTELLIGENCE</p><h1>Performance analytics</h1><p className="muted">Measure outcomes and improve care coordination.</p></div><button className="ghost-button">This month <ChevronDown size={14} /></button></div><div className="stat-grid"><StatCard icon={CheckCircle2} value="94.2%" label="Successful matches" detail="↑ 4.2%" /><StatCard icon={Clock3} value="31 min" label="Median time to accept" detail="↓ 18%" tone="blue" /><StatCard icon={HeartPulse} value="1,248" label="Patients supported" detail="↑ 22%" tone="purple" /><StatCard icon={LifeBuoy} value="4.8/5" label="Care team satisfaction" detail="Based on 318 ratings" tone="orange" /></div><div className="content-grid"><section className="panel"><div className="panel-heading"><div><h2>Time to care</h2><p className="muted">Average minutes from referral to acceptance</p></div></div><div className="big-metric"><b>31<span> min</span></b><span className="metric-up">↓ 8 min</span></div><div className="line-chart"><div className="line-path" /><div className="chart-labels"><span>May</span><span>Jun</span><span>Jul</span><span>Aug</span><span>Sep</span></div></div></section><section className="panel"><div className="panel-heading"><div><h2>Top specialties</h2><p className="muted">Referral volume by care type</p></div></div>{[['Emergency care','38%','teal'],['Maternity','24%','blue'],['Cardiology','18%','purple'],['Orthopedics','12%','orange'],['Other','8%','gray']].map(([n, p, c]) => <div className="specialty-row" key={n}><span>{n}</span><b>{p}</b><div className="progress"><i className={c} style={{ width: p }} /></div></div>)}</section></div></> }
+
+export default function Page() { const [loggedIn, setLoggedIn] = useState(false); const [view, setView] = useState<View>('dashboard'); const [sidebarOpen, setSidebarOpen] = useState(false); if (!loggedIn) return <Login onEnter={() => setLoggedIn(true)} />; const content = view === 'dashboard' ? <Overview setView={setView} /> : view === 'referrals' ? <Referrals /> : view === 'facilities' ? <Facilities /> : view === 'network' ? <NetworkView /> : view === 'analytics' ? <Analytics /> : <Overview setView={setView} />; return <div className="app-shell"><aside className={sidebarOpen ? 'sidebar open' : 'sidebar'}><div className="sidebar-top"><Logo /><button className="close-sidebar" onClick={() => setSidebarOpen(false)}><X size={18} /></button></div><div className="workspace"><div className="workspace-avatar">AM</div><div><b>Amina Mwangi</b><span>Healthcare worker</span></div><ChevronDown size={15} /></div><nav>{navItems.map(({ label, view: itemView, icon: Icon }) => <button className={view === itemView ? 'nav-item active' : 'nav-item'} onClick={() => { setView(itemView); setSidebarOpen(false) }} key={itemView}><Icon size={18} />{label}{itemView === 'referrals' && <span className="nav-count">18</span>}</button>)}</nav><div className="sidebar-section"><span>WORKSPACE</span><button className="nav-item"><Bell size={18} />Notifications<span className="notification-dot" /></button><button className="nav-item"><Settings size={18} />Settings</button></div><div className="sidebar-footer"><div className="help-card"><LifeBuoy size={18} /><div><b>Need help?</b><span>Visit our care center</span></div><ArrowRight size={15} /></div><div className="safety-note"><ShieldCheck size={15} /> Synthetic data mode</div></div></aside><main className="main-area"><header className="topbar"><button className="menu-button" onClick={() => setSidebarOpen(true)}><Menu size={20} /></button><div className="breadcrumbs"><span>Workspace</span><span>/</span><b>{navItems.find(n => n.view === view)?.label || 'Overview'}</b></div><div className="top-actions"><div className="top-search"><Search size={16} /><span>Search anything</span><kbd>⌘ K</kbd></div><button className="icon-button"><Bell size={18} /><i /></button><div className="avatar">AM</div></div></header><div className="page-content">{content}</div><footer className="app-footer"><span>CAREPATH AI · Student Hackathon Prototype</span><span><ShieldCheck size={13} /> AI assistance is advisory. Always confirm with a healthcare professional.</span></footer></main></div> }
